@@ -39,3 +39,5 @@ const upload = {
     fileFilter:fileFilter
 
 }
+
+module.exports = upload
