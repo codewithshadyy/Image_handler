@@ -10,9 +10,9 @@ exports.uploadImage = async (req, res) => {
 
         console.log(req.file);
 
-        res.json({
-            message: "Image received successfully"
-        })
+        // res.json({
+        //     message: "Image received successfully"
+        // })
 
         const processedImage = await sharp(req.file.buffer)
         .resize(
@@ -25,6 +25,15 @@ exports.uploadImage = async (req, res) => {
             quality:80
         })
         .toBuffer()
+
+        return res.status(200).json({
+            success:true,
+            image:{
+                filename:req.file.originalname,
+                 mimeType: req.file.mimetype,
+                size: req.file.size
+            }
+        })
 
 
         
