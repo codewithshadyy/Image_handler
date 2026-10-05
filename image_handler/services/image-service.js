@@ -4,6 +4,8 @@ const {randomUUID} = require("crypto")
 const {uploadObject, deleteObject} = require("../storage/object-storage")
 
 
+
+
 async function processedProductImage(buffer, productId) {
 
 
