@@ -20,12 +20,12 @@ const s3 = new S3Client({
 const bucket = process.env.S3_BUCKET
 
 
-async function uploadObject({key, buffer, contentTYpe}) {
+async function uploadObject({key, buffer, contentType}) {
 
     console.log("uploading an object.....", {
         key,
         buffer, 
-        contentTYpe
+        contentType
     })
 
    await s3.send(

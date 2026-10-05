@@ -4,6 +4,7 @@ const fs = require("fs")
 const path = require('path')
 
 const {processedProductImage}  = require("../services/image-service")
+const {createProduct} = require("../services/product.service")
 
 exports.uploadImage = async (req, res) => {
 
@@ -17,35 +18,55 @@ exports.uploadImage = async (req, res) => {
                 json:"ops an image is required"
             })
         }
-        console.log(req.file);
+      
 
-        // res.json({
-        //     message: "Image received successfully"
-        // })
+       const  {name, price} = req.body
 
-   const result = await processedProductImage(req.file.buffer, 42)
-
-        return res.status(200).json({
-            success:true,
-            message:"Image uploaded successfully",
-            image:{
-
-                originalName: req.file.originalname,
-
-                    originalFormat: result.originalFormat,
-
-                    originalWidth: result.originalWidth,
-
-                    originalHeight: result.originalHeight,
-
-                    originalSize: req.file.size,
-
-                    processedFormat: result.processedFormat,
-
-                    processedSize: result.processedSize
-               
-            }
+      if (!name || !price){
+        return res.status(400).json({
+            message:"Name and price fields are required"
         })
+      }
+
+    const result = await createProduct({
+          name,
+          price,
+          imageBuffer:req.file.buffer
+                   
+
+    })
+
+    return res.status(200).json({
+        message:"product created successfully",
+        data:result
+
+    })
+
+
+
+//    const result = await processedProductImage(req.file.buffer, 42)
+
+//         return res.status(200).json({
+//             success:true,
+//             message:"Image uploaded successfully",
+//             image:{
+
+//                 originalName: req.file.originalname,
+
+//                     originalFormat: result.originalFormat,
+
+//                     originalWidth: result.originalWidth,
+
+//                     originalHeight: result.originalHeight,
+
+//                     originalSize: req.file.size,
+
+//                     processedFormat: result.processedFormat,
+
+//                     processedSize: result.processedSize
+               
+//             }
+//         })
 
 
         
@@ -53,7 +74,8 @@ exports.uploadImage = async (req, res) => {
 
         return res.status(500).json({
             success:false,
-            message:error.message
+            message:"Failed to created product",
+            error:error.message
         })
         
     }
