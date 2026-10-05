@@ -1,7 +1,10 @@
 const sharp = require("sharp")
 
+const {randomUUID} = require("crypto")
+const {uploadObject, deleteObject} = require("../storage/object.storage")
 
-async function processedProductImage(buffer) {
+
+async function processedProductImage(buffer, productId) {
 
 
     const metadata = await sharp(buffer).metadata()
@@ -40,17 +43,34 @@ async function processedProductImage(buffer) {
     })
     .toBuffer()
 
+
+    const imageId = randomUUID()
+    const key = `products/${productId}/${imageId}.webp`
+
+
+    await uploadObject({
+        key, 
+        buffer:processedImage,
+        contentTYpe:"image/webp"
+
+    })
+
     return{
 
-        buffer:processedImage,
-        originalFormat: metadata.format,
-        originalWidth: metadata.width,
-        originalHeight: metadata.height,
-        processedFormat: "webp",
-        processedSize: processedImage.length
+        key,
+        format: "webp",
+        width: metadata.width,
+        height: metadata.height,
+        size: processedImage.length
     } 
     
     
 }
 
-module.exports = processedProductImage
+
+async function deleteProduct(key) {
+    await deleteObject(key)
+    
+}
+
+module.exports = {processedProductImage, deleteProduct}
