@@ -3,6 +3,8 @@ const sharp = require("sharp")
 const fs = require("fs")
 const path = require('path')
 
+const inspectImage  = require("../services/image.service")
+
 exports.uploadImage = async (req, res) => {
 
     try {
@@ -14,24 +16,18 @@ exports.uploadImage = async (req, res) => {
         //     message: "Image received successfully"
         // })
 
-        const processedImage = await sharp(req.file.buffer)
-        .resize(
-            {
-        width: 1200,
-        withoutEnlargement: true
-    }
-        )
-        .webp({
-            quality:80
-        })
-        .toBuffer()
+   const metadata = await inspectImage(req.file.buffer)
 
         return res.status(200).json({
             success:true,
             image:{
                 filename:req.file.originalname,
                  mimeType: req.file.mimetype,
-                size: req.file.size
+                size: req.file.size,
+
+                format: metadata.format,
+                width: metadata.width,
+                height: metadata.height
             }
         })
 
