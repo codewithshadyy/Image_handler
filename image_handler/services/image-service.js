@@ -1,7 +1,7 @@
 const sharp = require("sharp")
 
 const {randomUUID} = require("crypto")
-const {uploadObject, deleteObject} = require("../storage/object.storage")
+const {uploadObject, deleteObject} = require("../storage/object-storage")
 
 
 async function processedProductImage(buffer, productId) {

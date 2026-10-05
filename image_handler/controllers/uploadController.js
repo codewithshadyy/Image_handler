@@ -3,7 +3,7 @@ const sharp = require("sharp")
 const fs = require("fs")
 const path = require('path')
 
-const processedProductImage  = require("../services/image.service")
+const {processedProductImage}  = require("../services/image-service")
 
 exports.uploadImage = async (req, res) => {
 
@@ -23,7 +23,7 @@ exports.uploadImage = async (req, res) => {
         //     message: "Image received successfully"
         // })
 
-   const result = await processedProductImage(req.file.buffer)
+   const result = await processedProductImage(req.file.buffer, 42)
 
         return res.status(200).json({
             success:true,
